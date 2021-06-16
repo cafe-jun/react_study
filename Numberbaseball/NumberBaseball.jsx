@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState,memo,createRef } from 'react';
 import Try from './Try';
 
 // 숫자 4개 중복되지 않개 출력
 // this 를 안쓰는경우에는 밖으로 꺼내어 다룬곳에서도 사용할수 있도록 한다
+// hook 으로 변환을 할때도 영향이 없어 따로 작업을 안해도 좋다 
 
 function getNumbers() {
     const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -18,7 +19,7 @@ function getNumbers() {
     return array;
 }
 
-const NumberBaseball = () => {
+const NumberBaseball = memo(() => {
     // state = {
     //     result: '',
     //     value: '',
@@ -40,26 +41,32 @@ const NumberBaseball = () => {
     const [result, setResult] = useState('');
     const [value, setValue] = useState('');
     const [answer, setAnswer] = useState(getNumbers());
-    const [tries, setTries] = uTeState([]);
+    const [tries, setTries] = useState([]);
 
-    onSubmitForm = (e) => {
+    const onSubmitForm = (e) => {
         e.preventDefault();
         if (value === answer.join('')) {
             setResult('홈련');
-            // setTries([...tries.,{try: value,result: '홈런'}])
-            //     result: '홈런',
-            //     tries: [...this.state.tries, { try: this.state.value, result: '홈런!' }],
-            // });
+            setTries((prevTries) => {
+                return [...prevTries,{ try: value, result: '홈런!'}]
+            });
+            alert('게임을 다시 시작합니다')
+            setValue('')
+            setAnswer(getNumbers())
+            setTries([])
         } else {
             const answerArray = value.split('').map((v) => parseInt(v));
             let strike = 0;
             let ball = 0;
             if (tries.length >= 9) {
+                // 이전 값으로 현재 값을 적용할때는 
+                // 함수형 setState() 을 사용한다 
                 setResult(`10번 넘개 틀려서 실패! 답은 ${answer.join('')} 였습니다`);
                 alert('게임을 다시 시작 입니다.');
                 setValue('');
                 setAnswer(getNumbers());
                 setTries([]);
+                this.inputRef.focus()
             } else {
                 for (let i = 0; i < 4; i++) {
                     if (answerArray[i] === answer[i]) {
@@ -68,7 +75,9 @@ const NumberBaseball = () => {
                         ball += 1;
                     }
                 }
-                setTries([...tries, { try: value, result: `${strike} 스트라이크 ${ball} 볼 ` }]);
+                setTries((prevTries) => {
+                    return [...prevTries, { try: value, result: `${strike} 스트라이크 ${ball} 볼 ` }];
+                })
                 setValue('');
                 // this.setState({
                 //     tries: [...tries, { try: value, result: `${strike} 스트라이크 ${ball} 볼 ` }],
@@ -78,33 +87,38 @@ const NumberBaseball = () => {
         }
     };
 
-    onChangeInput = (e) => {
+    const onChangeInput = (e) => {
         console.log(answer);
-
-        this.setState({
-            value: e.target.value,
-        });
+        setValue(e.target.value);
     };
+    inputRef
+    onInputRef = (c) => {
+        this.inputRef = c;
+    }
 
     return (
         <>
             <h1>{result}</h1>
             <form onSubmit={onSubmitForm}>
-                <input maxLength={4} value={value} onChange={onChangeInput} />
+                <input ref={this.onInputRef} maxLength={4} value={value} onChange={onChangeInput} />
             </form>
-            <div> 시도 : {tries.length} (10번 안에 맞추기)</div>
+            <div> 시도 : {tries.length
+            
+            
+            } (10번 안에 맞추기)</div>
             <ul>
                 {/* 반복문의 가독성이나 성능을 위해 props 를 사용한다 */}
                 {/* 
-                        성능 최적화를 위해 key에 인덱스나 고유값이 아닌것을 사용하면 안된다 
-                        인덱스로 할때 뭐가 변했는지 인지를 못하기 대문에 최적화 할때 인덱스를 사용하면 안된다                         
-                    */}
+                    성능 최적화를 위해 key에 인덱스나 고유값이 아닌것을 사용하면 안된다 
+                    인덱스로 할때 뭐가 변했는지 인지를 못하기 대문에 최적화 할때 인덱스를 사용하면 안된다                         
+                    
+                */}
                 {tries.map((v, i) => {
                     return <Try key={`${i + 1}차 시도`} tryInfo={v} />;
                 })}
             </ul>
         </>
     );
-};
+});
 
 export default NumberBaseball;

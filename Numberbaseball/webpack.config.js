@@ -1,5 +1,7 @@
 const path = require('path');
 const RefreshWebpack = require('@pmmmwh/react-refresh-webpack-plugin');
+//process.env.NODE_ENV  = 'production'
+
 module.exports = {
     name: 'wordrelay-setting',
     mode: 'development',
@@ -26,7 +28,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'), // 실제의 경로
         filename: 'app.js',
-        publicPath: '/dist/', // 가상의 경로 app.use(express.static(__dirname,'dist'))
+        //publicPath: '/dist/', // 가상의 경로 app.use(express.static(__dirname,'dist'))
     },
     devServer: {
         publicPath: '/dist/',
