@@ -108,10 +108,10 @@ class NumberBaseball extends Component {
         return (
             <>
                 <h1>{result}</h1>
-                <form onSubmit={onSubmitForm}>
+                <form onSubmit={this.onSubmitForm}>
                     <input ref={this.onInputRef} maxLength={4} value={value} onChange={onChangeInput} />
                 </form>
-                <div> 시도 : {tries.length} (10번 안에 맞추기)</div>
+                <div> 시도 : {this.tries.length} (10번 안에 맞추기)</div>
                 <ul>
                     {/* 반복문의 가독성이나 성능을 위해 props 를 사용한다 */}
                     {/* 

@@ -20,24 +20,11 @@ function getNumbers() {
 }
 
 const NumberBaseball = memo(() => {
-    // state = {
-    //     result: '',
-    //     value: '',
-    //     answer: getNumbers(),
-    //     tries: [],
-    //     // 배열에 값을 넣으려면 push를 사용하면 안된다 (불변셩)
-    //     // react 가 변화를 감지를 하는 건 예전 state와 현재 state 변해야 한다
-    //     // 즉 참조가 변해야 한다 const arr = [] arr.push(1) arr === arr
-    // };
-    // fruit = [
-    //     { idx: 1, name: 'like' },
-    //     { idx: 2, name: '사과' },
-    //     { idx: 3, name: '포도' },
-    //     { idx: 4, name: '배' },
-    //     { idx: 5, name: '굿' },
-    // ];
     // 화살표 함수는 bind this를 자동으로 해준다
     // 화살표 함수를 사용해자 construct 에서 bind this 를 안해주어도 된다
+
+    // value 가 변하면 함수 컴포넌트는 통째로 실행히 되기 때문에 
+    // getNumbers 가 실행이 된다 ㄷ
     const [result, setResult] = useState('');
     const [value, setValue] = useState('');
     const [answer, setAnswer] = useState(getNumbers());
@@ -48,6 +35,7 @@ const NumberBaseball = memo(() => {
         if (value === answer.join('')) {
             setResult('홈련');
             setTries((prevTries) => {
+                // 함수로 사용을 할때 
                 return [...prevTries,{ try: value, result: '홈런!'}]
             });
             alert('게임을 다시 시작합니다')
@@ -66,7 +54,7 @@ const NumberBaseball = memo(() => {
                 setValue('');
                 setAnswer(getNumbers());
                 setTries([]);
-                this.inputRef.focus()
+                inputRef.focus()
             } else {
                 for (let i = 0; i < 4; i++) {
                     if (answerArray[i] === answer[i]) {
@@ -79,22 +67,14 @@ const NumberBaseball = memo(() => {
                     return [...prevTries, { try: value, result: `${strike} 스트라이크 ${ball} 볼 ` }];
                 })
                 setValue('');
-                // this.setState({
-                //     tries: [...tries, { try: value, result: `${strike} 스트라이크 ${ball} 볼 ` }],
-                //     value: '',
-                // });
             }
         }
     };
 
     const onChangeInput = (e) => {
-        console.log(answer);
         setValue(e.target.value);
     };
-    inputRef
-    onInputRef = (c) => {
-        this.inputRef = c;
-    }
+    inputRef = createRef();
 
     return (
         <>
