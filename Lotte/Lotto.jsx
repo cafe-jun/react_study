@@ -71,7 +71,7 @@ const Lotto = () => {
     }, [winNumbers]);
     // 두번쩨 배열 인수에꼬 변화를 인지할 값을 넣어주어야 한다
     // 만약 componentDidUpdate 만 실행을 하고 싶다고 하면
-    // 우회적으로 useRef 값을 넣어서 처리를 해줄수가 있따
+    // 우회적으로 useRef 값을 넣어서 처리를 해줄수가 있다
     const mounted = useRef(false);
     useEffect(() => {
         if (!mounted.current) {
