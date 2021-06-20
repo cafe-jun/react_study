@@ -83,7 +83,7 @@ const TicTacToe = () => {
             win = true;
         } else if (tableData[0][cell] === turn && tableData[1][cell] === turn && tableData[2][cell] === turn) {
             win = true;
-        } else if (tableData[0][0] === trun && tableData[1][1] === turn && tableData[2][2] === turn) {
+        } else if (tableData[0][0] === turn && tableData[1][1] === turn && tableData[2][2] === turn) {
             win = true;
         } else if (tableData[2][0] === turn && tableData[1][1] === turn && tableData[0][2] === turn) {
             win = true;
@@ -94,7 +94,7 @@ const TicTacToe = () => {
         } else {
             // 무승부 검사
             let all = true; // 칸이 다 차있다라는 가정
-            table.forEach((row) => {
+            tableData.forEach((row) => {
                 row.forEach((cell) => {
                     if (!cell) {
                         all = false;
@@ -107,9 +107,7 @@ const TicTacToe = () => {
                 dispatch({ type: CHANGE_TURN });
             }
         }
-        return () => {
-            cleanup;
-        };
+        return () => {};
     }, [recentCell]);
     return (
         <>
