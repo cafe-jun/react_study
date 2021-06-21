@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useMemo} from 'react';
 import Tr from './Tr';
 
 const Table = ({ onClick, tableData, dispatch }) => {
@@ -7,7 +7,9 @@ const Table = ({ onClick, tableData, dispatch }) => {
             {Array(tableData.length)
                 .fill()
                 .map((tr, i) => (
-                    <Tr key={i} rowIndex={i} rowData={tableData[i]} dispatch={dispatch} />
+                    useMemo(
+                        <Tr key={i} rowIndex={i} rowData={tableData[i]} dispatch={dispatch} />
+                    ,[tableData[i]])
                 ))}
         </table>
     );
